@@ -230,7 +230,7 @@ const taskClickHandler = ({ srcElement: element }) => {
   todoFind(element).classList.toggle("grid");
 };
 
-// check for active or on focus input in add--new-todo form
+// check for active or on focus input in todo--add-new form
 const isTodoInputFocus = () => {
   let flag = false;
   el(".todo--add-new > input").forEach((e) => {
