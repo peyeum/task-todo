@@ -230,6 +230,16 @@ const taskClickHandler = ({ srcElement: element }) => {
   todoFind(element).classList.toggle("grid");
 };
 
+// check for active or on focus input in add--new-todo form
+const isTodoInputFocus = () => {
+  let flag = false;
+  el(".todo--add-new > input").forEach((e) => {
+    if (e == document.activeElement) flag = true;
+  });
+  return flag;
+};
+
+// obviously named
 const initialState = () => {
   if (!isMobile()) {
     if (todoActive()) {
@@ -240,8 +250,8 @@ const initialState = () => {
   }
 
   if (todoActive()) {
-    if (e(".todo--add-new > input") == document.activeElement) return;
-    else e(".backButton").click();
+    if (isTodoInputFocus) return; // escpe function when
+    e(".backButton").click();
   }
 
   el(".task").forEach((e) => {
@@ -612,7 +622,7 @@ window.addEventListener("beforeunload", (event) => {
   const e = event || window.event;
   e.preventDefault(); // prevent from reloading
   return e ? (e.returnValue = "") : ""; // Legacy method for cross browser support
-}); 
+});
 
 /*
 // Task List Input Box Validation
