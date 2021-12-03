@@ -1,0 +1,83 @@
+Tato
+Task Todo, a simple and more organized todo list app
+make and manage your todo list and be productive!
+
+
+
+const virtualCSS = new CSSStyleSheet();
+const customCSSVar = () => {
+  return `
+  :root {
+    --winHeight: ${window.innerHeight}px;
+    --mainHeight: ${
+      window.innerHeight -
+      (e("nav").getBoundingClientRect().height +
+        e("footer").getBoundingClientRect().height)
+    }px;
+    --tHeight: calc(var(--mainHeight) - ${
+      e(".task--title").getBoundingClientRect().height +
+      e(".task--foot").getBoundingClientRect().height
+    }px);
+  }
+  `;
+};
+document.adoptedStyleSheets = [...document.adoptedStyleSheets, virtualCSS];
+
+
+
+
+
+class TestEl extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.adoptedStyleSheets = [virtualCSS];
+  }
+
+  connectedCallback() {
+    this.shadowRoot.innerHTML = `<h1>This will be tomato colored, too</h1>`;
+  }
+}
+
+let customElementRegistry = window.customElements;
+customElementRegistry.define("custom-section", TestEl);
+
+const testEl = new TestEl();
+document.body.appendChild(testEl);
+
+
+const main = {
+  element: e("main"),
+  observer: null,
+  observeConfig: { childList: true, attributes: true, subtree: true },
+  observeCallback(mutationList) {
+    mutationList.forEach((mutation) => {
+      console.log(mutation);
+    });
+  },
+  observeStart() {
+    this.observer = new MutationObserver(this.observeCallback);
+    this.observer.observe(this.element, this.observeConfig);
+  },
+  observeStop() {
+    this.observer.disconnect();
+  },
+};
+
+
+class InitialState {
+  constructor(target) {
+    this.element = target;
+    this.state = "";
+  }
+
+  setState() {
+    this.state = this.element.innerHTML;
+  }
+
+  useState() {
+    this.element.innerHTML = this.state;
+  }
+}
+
+const AppState = new InitialState(e("section"));
