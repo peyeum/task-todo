@@ -240,7 +240,8 @@ const initialState = () => {
   }
 
   if (todoActive()) {
-    e(".backButton").click();
+    if (e(".todo--add-new > input") == document.activeElement) return;
+    else e(".backButton").click();
   }
 
   el(".task").forEach((e) => {
